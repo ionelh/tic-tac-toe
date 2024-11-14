@@ -1,2 +1,2 @@
 # tic-tac-toe
-tic tac toe game built with my kiddo
+Tic tac toe game built with my kiddo. This is just to introduce my son to coding, please don't take it as a reference :).

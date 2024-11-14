@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style type="text/css">
+      html {
+        height: 100%;
+      }
+
+      body {
+        font-size: 50px;
+        font-family: 'Verdana';
+        height: 100%;
+      }
+
+      div {
+        display: flex;
+        min-height: 100%;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: auto;
+
+        td {
+          border: 3px solid black;
+          padding: 30px;
+          width: 50px;
+          height: 50px;
+          text-align: center;
+        }
+      }
+    </style>
+    <meta charset="utf-8">
+    <title>Tic tac toe</title>
+  </head>
+  <body>
+    <div id="wrapper">
+    </div>
+    <script type="text/javascript">
+      let board = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ];
+
+      const handleCellClick = (row, column) => {
+        eraseBoard();
+        board[row][column] = turn === 'X' ? 'X' : 'O';
+        drawBoard();
+        const winner = getWinner();
+        setTimeout(() => {
+          if (winner) {
+            eraseBoard();
+            board = [
+              [null, null, null],
+              [null, null, null],
+              [null, null, null],
+            ];
+            if (confirm(`The winner is: ${winner}`)) drawBoard();
+          } else {
+            if (countEmptyCells() === 0) {
+              if (confirm('There was no winner')) {
+                eraseBoard();
+                board = [
+                  [null, null, null],
+                  [null, null, null],
+                  [null, null, null],
+                ];
+                drawBoard();
+              }
+            } else {
+              if (turn === 'X') {
+                turn = 'O';
+              } else if (turn === 'O') {
+                turn = 'X';
+              }
+            }
+          }
+        }, 100);
+      };
+
+      drawBoard();
+
+      let turn = 'X';
+
+      const getWinner = () => {
+        const symbol = turn === 'X' ? 'X' : 'O';
+        if (board[0][0] === symbol && board[0][1] === symbol && board[0][2] === symbol) return symbol;
+        if (board[1][0] === symbol && board[1][1] === symbol && board[1][2] === symbol) return symbol;
+        if (board[2][0] === symbol && board[2][1] === symbol && board[2][2] === symbol) return symbol;
+
+        if (board[0][0] === symbol && board[1][0] === symbol && board[2][0] === symbol) return symbol;
+        if (board[0][1] === symbol && board[1][1] === symbol && board[2][1] === symbol) return symbol;
+        if (board[0][2] === symbol && board[1][2] === symbol && board[2][2] === symbol) return symbol;
+
+        if (board[0][0] === symbol && board[1][1] === symbol && board[2][2] === symbol) return symbol;
+        if (board[0][2] === symbol && board[1][1] === symbol && board[2][0] === symbol) return symbol;
+      };
+
+      function drawBoard() {
+        const table = document.createElement('table');
+        board.forEach((row, rowIndex) => {
+          const tr = document.createElement('tr');
+          table.appendChild(tr);
+          row.forEach((col, colIndex) => {
+            const cellValue = board[rowIndex][colIndex];
+            const td = document.createElement('td');
+            const text = document.createTextNode(cellValue !== null ? cellValue : '');
+            td.appendChild(text);
+            td.addEventListener('click', () => handleCellClick(rowIndex, colIndex));
+            tr.appendChild(td);
+          });
+        });
+        document.querySelector('#wrapper').appendChild(table);
+      };
+
+      const eraseBoard = () => {
+        document.querySelector('table').remove();
+      };
+
+      const countEmptyCells = () => {
+        let emptyCells = 0;
+
+        board.forEach((row, rowI) => {
+          row.forEach((col, colI) => {
+            if (board[rowI][colI] === null) emptyCells = emptyCells + 1;
+          });
+        });
+
+        return emptyCells;
+      };
+    </script>
+  </body>
+</html>
